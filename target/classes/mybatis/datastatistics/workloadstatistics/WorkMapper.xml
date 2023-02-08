@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.datastatistics.workloadstatistics.mapper.WorkMapper">
+    <resultMap id="bb" type="Work">
+        <id property="registerId" column="registerId"></id>
+        <result property="doctorNumber" column="doctorNumber"></result>
+        <result property="doctorName" column="doctorName"></result>
+        <result property="registerPrice" column="registerPrice"></result>
+        <result property="patientName" column="patientName"></result>
+        <result property="seeTime" column="seeTime"></result>
+        <result property="createBy" column="createBy"></result>
+        <result property="createTime" column="createTime"></result>
+        <result property="updateBy" column="updateBy"></result>
+        <result property="updateTime" column="updateTime"></result>
+        <result property="remark" column="remark"></result>
+    </resultMap>
+
+    <select id="selectWork" resultMap="bb">
+     select register_id registerId ,doctor_number  doctorNumber,doctor_name doctorName,register_price registerPrice,patient_name patientName,see_time seeTime,create_time createTime
+     from workloadstatistics_szd
+      <where>
+          <if test="doctorName!=null and doctorName!=''">
+              and doctor_name like concat('%',#{doctorName},'%')
+          </if>
+          <if test="seeTime!=null and seeTime!=''">
+            and create_time like concat('%',#{createTime},'%')
+          </if>
+      </where>
+ </select>
+<!--主键查询-->
+    <select id="selectById" resultMap="bb">
+         select register_id registerId ,doctor_number  doctorNumber,doctor_name doctorName,register_price registerPrice,patient_name patientName,create_time createTime
+     from workloadstatistics_szd
+    where register_id = #{registerId}
+    </select>
+    <update id="updateWork" parameterType="Work">
+        update workloadstatistics_szd
+        <set>
+            <if test="registerId != null and registerId != 0">register_id = #{registerId},</if>
+            <if test="doctorNumber != null and doctorNumber != ''">doctor_number = #{doctorNumber},</if>
+            <if test="doctorName != null and doctorName != ''">doctor_name = #{doctorName},</if>
+            <if test="registerPrice != null and registerPrice != ''">register_price = #{registerPrice},</if>
+            <if test="patientName != null and patientName != ''">patient_name = #{patientName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </set>
+        where register_id = #{registerId}
+    </update>
+
+    <insert id="saveWork" parameterType="Work">
+        insert into workloadstatistics_szd(
+        <if test="registerId != null and registerId != 0">register_id,</if>
+        <if test="doctorNumber != null and doctorNumber != 0">doctor_number,</if>
+        <if test="doctorName != null and doctorName != ''">doctor_name,</if>
+        <if test="registerPrice != null and registerPrice != ''">register_price,</if>
+        <if test="patientName != null and patientName != ''">patient_name,</if>
+        create_time
+        )values(
+        <if test="registerId != null and registerId != 0">#{registerId},</if>
+        <if test="doctorNumber != null and doctorNumber != 0">#{doctorNumber},</if>
+        <if test="doctorName != null and doctorName != ''">#{doctorName},</if>
+        <if test="registerPrice != null and registerPrice != ''">#{registerPrice},</if>
+        <if test="patientName != null and patientName != ''">#{patientName},</if>
+        sysdate()
+        )
+    </insert>
+
+    <delete id="delete">
+ 		delete from workloadstatistics_szd where register_id in
+ 		<foreach collection="registerIds" separator="," open="(" close=")" item="register">
+            #{register}
+        </foreach>
+ 	</delete>
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.drugmanagement.supplier.mapper.SupplierMapper">
+
+    <resultMap id="SupplierResult" type="Supplier">
+        <id property="supplierId" column="supplier_id"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="contactPerson" column="contact_person"/>
+        <result property="contactPhone" column="contact_phone"/>
+        <result property="contactTel" column="contact_tel"/>
+        <result property="bankAccounts" column="bank_accounts"/>
+        <result property="address" column="address"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectSupplierVo">
+        select s.supplier_id , s.supplier_name , s.contact_person , s.contact_phone,
+        s.contact_tel , s.bank_accounts , s.address , s.status , s.create_by , s.create_time ,s.update_by,
+        s.update_time , s.remark
+        from supplier_maintenance s
+    </sql>
+
+
+    <!--删除-->
+    <delete id="batchDelete">
+        delete from supplier_maintenance
+        where supplier_id in
+        <foreach collection="supplierIds" separator="," open="(" close=")" item="supplierId">
+            #{supplierId}
+        </foreach>
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="Supplier">
+        update supplier_maintenance
+        <set>
+            <if test="supplierName != null and supplierName != ''">supplier_name = #{supplierName},</if>
+            <if test="contactPerson != null and contactPerson != ''">contact_person = #{contactPerson},</if>
+            <if test="contactPhone != null and contactPhone != ''">contact_phone = #{contactPhone},</if>
+            <if test="contactTel != null and contactTel != ''">contact_tel = #{contactTel},</if>
+            <if test="bankAccounts != null and bankAccounts != ''">bank_accounts = #{bankAccounts},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = #{updateTime}
+        </set>
+        where supplier_id = #{supplierId}
+    </update>
+
+    <!--根据主键进行查询-->
+    <select id="selectById" parameterType="Long" resultMap="SupplierResult">
+        <include refid="selectSupplierVo"/>
+        where supplier_id = #{supplierId}
+    </select>
+
+    <!--新增-->
+    <insert id="insert" parameterType="Supplier">
+        insert into supplier_maintenance(
+        <if test="supplierId != null and supplierId != 0">supplier_id,</if>
+        <if test="supplierName != null and supplierName != ''">supplier_name,</if>
+        <if test="contactPerson != null and contactPerson != ''">contact_person,</if>
+        <if test="contactPhone != null and contactPhone != ''">contact_phone,</if>
+        <if test="contactTel != null and contactTel != ''">contact_tel,</if>
+        <if test="bankAccounts != null and bankAccounts != ''">bank_accounts,</if>
+        <if test="address != null and address != ''">address,</if>
+        <if test="status != null">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        ) values (
+        <if test="supplierId != null and supplierId != 0">#{supplierId},</if>
+        <if test="supplierName != null and supplierName != ''">#{supplierName},</if>
+        <if test="contactPerson != null and contactPerson != ''">#{contactPerson},</if>
+        <if test="contactPhone != null and contactPhone != ''">#{contactPhone},</if>
+        <if test="contactTel != null and contactTel != ''">#{contactTel},</if>
+        <if test="bankAccounts != null and bankAccounts != ''">#{bankAccounts},</if>
+        <if test="address != null and address != ''">#{address},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        #{createTime}
+        )
+    </insert>
+
+    <!--分页查询全部-->
+    <select id="selectList" parameterType="Supplier" resultMap="SupplierResult">
+        <include refid="selectSupplierVo"/>
+        <where>
+            <if test="supplierName != null and supplierName != ''">
+                AND s.supplier_name like concat('%', #{supplierName}, '%')
+            </if>
+            <if test="contactPerson != null and contactPerson != ''">
+                AND s.contact_person like concat('%', #{contactPerson}, '%')
+            </if>
+            <if test="contactTel != null and contactTel != ''">
+                AND s.contact_tel = #{contactTel}
+            </if>
+            <if test="status != null and status != ''">
+                AND s.status = #{status}
+            </if>
+        </where>
+        order by s.supplier_id
+    </select>
+
+
+
+</mapper>

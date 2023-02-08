@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.drugmanagement.manufacturer.mapper.ManufacturerMapper">
+
+    <resultMap id="ManufacturerResult" type="Manufacturer">
+        <id property="manufacturerId" column="manufacturer_id"/>
+        <result property="manufacturerName" column="manufacturer_name"/>
+        <result property="manufacturerNum" column="manufacturer_num"/>
+        <result property="contactPerson" column="contact_person"/>
+        <result property="phone" column="phone"/>
+        <result property="keyword" column="keyword"/>
+        <result property="address" column="address"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectManufacturerVo">
+        select m.manufacturer_id , m.manufacturer_name , m.manufacturer_num , m.contact_person,
+        m.phone , m.keyword , m.address , m.status , m.create_by , m.create_time ,m.update_by,
+        m.update_time , m.remark
+        from manufacturer_maintenance m
+    </sql>
+
+
+    <!--删除-->
+    <delete id="batchDelete">
+        delete from manufacturer_maintenance
+        where manufacturer_id in
+        <foreach collection="manufacturerIds" separator="," open="(" close=")" item="manufacturerId">
+            #{manufacturerId}
+        </foreach>
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="Manufacturer">
+        update manufacturer_maintenance
+        <set>
+            <if test="manufacturerName != null and manufacturerName != ''">manufacturer_name = #{manufacturerName},</if>
+            <if test="manufacturerNum != null and manufacturerNum != ''">manufacturer_num = #{manufacturerNum},</if>
+            <if test="contactPerson != null and contactPerson != ''">contact_person = #{contactPerson},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="keyword != null and keyword != ''">keyword = #{keyword},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = #{updateTime}
+        </set>
+        where manufacturer_id = #{manufacturerId}
+    </update>
+
+    <!--根据主键进行查询-->
+    <select id="selectById" parameterType="Long" resultMap="ManufacturerResult">
+        <include refid="selectManufacturerVo"/>
+        where manufacturer_id = #{manufacturerId}
+    </select>
+
+    <!--新增-->
+    <insert id="insert" parameterType="Manufacturer">
+        insert into manufacturer_maintenance(
+        <if test="manufacturerId != null and manufacturerId != 0">manufacturer_id,</if>
+        <if test="manufacturerName != null and manufacturerName != ''">manufacturer_name,</if>
+        <if test="manufacturerNum != null and manufacturerNum != ''">manufacturer_num,</if>
+        <if test="contactPerson != null and contactPerson != ''">contact_person,</if>
+        <if test="phone != null and phone != ''">phone,</if>
+        <if test="keyword != null and keyword != ''">keyword,</if>
+        <if test="address != null and address != ''">address,</if>
+        <if test="status != null">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        ) values (
+        <if test="manufacturerId != null and manufacturerId != 0">#{manufacturerId},</if>
+        <if test="manufacturerName != null and manufacturerName != ''">#{manufacturerName},</if>
+        <if test="manufacturerNum != null and manufacturerNum != ''">#{manufacturerNum},</if>
+        <if test="contactPerson != null and contactPerson != ''">#{contactPerson},</if>
+        <if test="phone != null and phone != ''">#{phone},</if>
+        <if test="keyword != null and keyword != ''">#{keyword},</if>
+        <if test="address != null and address != ''">#{address},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        #{createTime}
+        )
+    </insert>
+
+    <!--分页查询全部-->
+    <select id="selectList" parameterType="Manufacturer" resultMap="ManufacturerResult">
+        <include refid="selectManufacturerVo"/>
+        <where>
+            <if test="manufacturerName != null and manufacturerName != ''">
+                AND m.manufacturer_name like concat('%', #{manufacturerName}, '%')
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND m.keyword like concat('%', #{keyword}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND m.phone like concat('%', #{phone}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND m.status = #{status}
+            </if>
+            <if test="createTime != null">
+                AND left(m.create_time, 10) =left(#{createTime}, 10)
+            </if>
+        </where>
+        order by m.manufacturer_id
+    </select>
+
+
+
+</mapper>
