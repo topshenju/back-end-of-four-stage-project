@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.systemmanagement.department.mapper.HisDeptMapper">
+
+	<resultMap type="HisDept" id="HisDeptResult">
+		<id     property="deptId"     column="dept_id"     />
+		<result property="deptName"   column="dept_name"   />
+		<result property="deptCode"   column="dept_code"   />
+		<result property="deptNum"    column="dept_num"   />
+		<result property="deptLeader" column="dept_leader"   />
+		<result property="deptPhone"  column="dept_phone"      />
+		<result property="status"     column="status"      />
+		<result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+		<result property="remark"     column="remark" />
+	</resultMap>
+	<sql id="selectHisDeptVo">
+        select
+        d.dept_id, d.dept_name, d.dept_code, d.dept_num, d.dept_leader, d.dept_phone, d.status, d.create_by,
+        d.create_time,d.update_by,d.update_time,d.remark
+        from department_lyw d
+    </sql>
+    
+	<select id="selectList" parameterType="HisDept" resultMap="HisDeptResult">
+        <include refid="selectHisDeptVo"/>
+        <where>
+		<if test="deptName != null and deptName != ''">
+			AND d.dept_name like concat('%', #{deptName}, '%')
+		</if>
+		<if test="status != null and status != ''">
+			AND d.status = #{status}
+		</if>
+		</where>
+		order by d.dept_id
+    </select>
+
+	<insert id="insert" parameterType="HisDept">
+		insert into department_lyw(
+		<if test="deptId != null and deptId != 0">dept_id,</if>
+		<if test="deptName != null and deptName != ''">dept_name,</if>
+		<if test="deptCode != null and deptCode != ''">dept_code,</if>
+		<if test="deptNum != null and deptNum != 0">dept_num,</if>
+		<if test="deptLeader != null and deptLeader != ''">dept_leader,</if>
+		<if test="deptPhone != null and deptPhone != ''">dept_phone,</if>
+		<if test="status != null">status,</if>
+		<if test="createBy != null and createBy != ''">create_by,</if>
+		create_time
+		)values(
+		<if test="deptId != null and deptId != 0">#{deptId},</if>
+		<if test="deptName != null and deptName != ''">#{deptName},</if>
+		<if test="deptCode != null and deptCode != ''">#{deptCode},</if>
+		<if test="deptNum != null and deptNum != 0">#{deptNum},</if>
+		<if test="deptLeader != null and deptLeader != ''">#{deptLeader},</if>
+		<if test="deptPhone != null and deptPhone != ''">#{deptPhone},</if>
+		<if test="status != null">#{status},</if>
+		<if test="createBy != null and createBy != ''">#{createBy},</if>
+		#{createTime}
+		)
+	</insert>
+
+	<select id="selectById" parameterType="Long" resultMap="HisDeptResult">
+		<include refid="selectHisDeptVo"/>
+		where dept_id = #{deptId}
+	</select>
+
+	<update id="update" parameterType="HisDept">
+		update department_lyw
+		<set>
+			<if test="deptName != null and deptName != ''">dept_name = #{deptName},</if>
+			<if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
+			<if test="deptNum != null and deptNum != 0">dept_num = #{deptNum},</if>
+			<if test="deptLeader != null and deptLeader != ''">dept_leader = #{deptLeader},</if>
+			<if test="deptPhone != null and deptPhone != ''">dept_phone = #{deptPhone},</if>
+			<if test="status != null and status != ''">status = #{status},</if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+			update_time = #{updateTime}
+		</set>
+		where dept_id = #{deptId}
+	</update>
+
+     <delete id="batchDelete">
+		 delete from department_lyw where dept_id in 
+		 <foreach collection="deptId" separator="," open="(" close=")" item="deptId">
+			 #{deptId}
+		 </foreach>
+	 </delete>
+
+
+    
+    <select id="selectDeptListByRoleId" resultType="Integer">
+		select d.dept_id
+		from sys_dept d
+            left join sys_role_dept rd on d.dept_id = rd.dept_id
+        where rd.role_id = #{roleId}
+            <if test="deptCheckStrictly">
+              and d.dept_id not in (select d.parent_id from sys_dept d inner join sys_role_dept rd on d.dept_id = rd.dept_id and rd.role_id = #{roleId})
+            </if>
+		order by d.parent_id, d.order_num
+	</select>
+    
+
+    
+    <select id="checkDeptExistUser" parameterType="Long" resultType="int">
+		select count(1) from sys_user where dept_id = #{deptId} and del_flag = '0'
+	</select>
+	
+	<select id="hasChildByDeptId" parameterType="Long" resultType="int">
+		select count(1) from sys_dept
+		where del_flag = '0' and parent_id = #{deptId} limit 1
+	</select>
+	
+	<select id="selectChildrenDeptById" parameterType="Long" resultMap="HisDeptResult">
+		select * from sys_dept where find_in_set(#{deptId}, ancestors)
+	</select>
+	
+	<select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
+		select count(*) from sys_dept where status = 0 and del_flag = '0' and find_in_set(#{deptId}, ancestors)
+	</select>
+	
+	<select id="checkDeptNameUnique" resultMap="HisDeptResult">
+	    <include refid="selectHisDeptVo"/>
+		where dept_name=#{deptName} and parent_id = #{parentId} limit 1
+	</select>
+
+	
+
+	
+	<update id="updateDeptChildren" parameterType="java.util.List">
+	    update sys_dept set ancestors =
+	    <foreach collection="depts" item="item" index="index"
+	        separator=" " open="case dept_id" close="end">
+	        when #{item.deptId} then #{item.ancestors}
+	    </foreach>
+	    where dept_id in
+	    <foreach collection="depts" item="item" index="index"
+	        separator="," open="(" close=")">
+	        #{item.deptId}
+	    </foreach>
+	</update>
+	 
+	 <update id="updateDeptStatus" parameterType="SysDept">
+ 	    update sys_dept
+ 	    <set>
+ 	        <if test="status != null and status != ''">status = #{status},</if>
+ 	        <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+ 	        update_time = sysdate()
+        </set>
+ 	    where dept_id in (${ancestors})
+	</update>
+	
+	<delete id="deleteDeptById" parameterType="Long">
+		update sys_dept set del_flag = '2' where dept_id = #{deptId}
+	</delete>
+
+</mapper> 

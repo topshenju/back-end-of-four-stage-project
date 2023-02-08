@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class TypePrescription extends BaseEntity {
     /*处方id*/
     @Excel(name = "处方id")
-    private Long prescriptionId;
+    private String prescriptionId;
     /*处方名称*/
     @Excel(name = "处方名称")
     private String prescriptionName;

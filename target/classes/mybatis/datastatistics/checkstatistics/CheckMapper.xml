@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.datastatistics.checkstatistics.mapper.CheckMapper">
+    <resultMap id="cc" type="Check">
+        <id property="projectId" column="projectId"></id>
+        <result property="projectName" column="projectName"></result>
+        <result property="projectPrice" column="projectPrice"></result>
+        <result property="patientName" column="patientName"></result>
+        <result property="createBy" column="createBy"></result>
+        <result property="createTime" column="createTime"></result>
+    </resultMap>
+    <select id="selectCheck" resultMap="cc">
+        select project_id projectId,project_name projectName,project_price projectPrice,patient_name patientName,create_by createBy,create_time createTime
+        from checkstatistics_szd
+        <where>
+            <if test="projectName!=null and projectName!=''">
+                and project_name like concat('%',#{projectName},'%')
+            </if>
+            <if test="patientName!=null and patientName!=''">
+                and patient_name like concat('%',#{patientName},'%')
+            </if>
+            <if test="createTime!=null and createTime!=''">
+                and create_time like concat('%',#{createTime},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

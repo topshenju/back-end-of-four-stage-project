@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.datastatistics.paymentsstatistics.mapper.PayMapper">
+    <resultMap id="dd" type="Pay">
+        <id property="refundAmount" column="refundAmount"></id>
+        <result property="chargeAmount" column="chargeAmount"></result>
+        <result property="cashInCome" column="cashInCome"></result>
+        <result property="aliPayRevent" column="aliPayRevent"></result>
+        <result property="aliPayRefund" column="aliPayRefund"></result>
+        <result property="cashRefund" column="cashRefund"></result>
+        <result property="createTime" column="createTime"></result>
+    </resultMap>
+    <select id="selectPay" resultMap="dd">
+          select refund_amount refundAmount,charge_amount chargeAmount ,cash_income cashInCome,alipay_revent aliPayRevent,alipay_refund aliPayRefund,cash_refund cashRefund,create_time createTime
+          from paymentsstatistics_szd
+        <where>
+            <if test="createTime!=null and createTime!=''">
+                and create_time like concat('%',#{createTime},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

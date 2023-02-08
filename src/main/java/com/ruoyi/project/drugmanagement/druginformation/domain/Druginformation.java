@@ -26,13 +26,13 @@ public class Druginformation extends BaseEntity {
     private String maintenanceNum;
     /*生产厂家*/
     @Excel(name = "生产厂家")
-    private Long manufacturerId;
+    private String manufacturerId;
     /*药品类型*/
     @Excel(name = "药品类型")
-    private Long drugtypeId;
+    private String drugtypeId;
     /*处方类型*/
     @Excel(name = "处方类型")
-    private Long prescriptionId;
+    private String prescriptionId;
     /*单位*/
     @Excel(name = "单位")
     private String unit;
