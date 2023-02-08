@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.project.seedoctor.outpatientservice.mapper.OutpatientServiceMapper">
+    <sql id="sql">
+        select patients_id patientsId,id_number idNumber,patients_name patientsName,patients_phone patientsPhone,
+               patients_age patientsAge,patients_sex patientsSex,birth_date birthDate,address_information addressInformation,
+               period_time periodTime,registration_time registrationTime from outpatientservice_yjd
+    </sql>
+
+    <select id="selectMoreId" resultMap="aa">
+        select distinct id_number idNumber from outpatientservice_yjd
+        <where>
+            <if test="idNumber !=null and idNumber !=''">
+                and id_number like concat('%',#{param1},'%')
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="aa" type="Registered">
+        <id property="patientsId" column="patientsId"></id>
+        <result property="idNumber" column="idNumber"></result>
+        <result property="patientsName" column="patientsName"></result>
+        <result property="patientsPhone" column="patientsPhone"></result>
+        <result property="patientsAge" column="patientsAge"></result>
+        <result property="patientsSex" column="patientsSex"></result>
+        <result property="birthDate" column="birthDate"></result>
+        <result property="addressInformation" column="addressInformation"></result>
+        <result property="periodTime" column="periodTime"></result>
+        <result property="registrationTime" column="registrationTime"></result>
+    </resultMap>
+
+    <select id="selectOne" resultMap="aa">
+        <include refid="sql"/>
+        <where>
+            <if test="idNumber!=null and idNumber !=''">
+                and id_number like concat('%',#{idNumber},'%')
+            </if>
+        </where>
+    </select>
+
+    <sql id="sql2">
+        select registered_id registeredId,department_id departmentId,department_name departmentName,
+               registered_type registeredType,registered_period registeredPeriod,registered_time registeredTime,
+               current_no currentNo from registered_yjd
+    </sql>
+
+    <select id="selectMore" resultMap="bb">
+        <include refid="sql2"/>
+        <where>
+            <if test="departmentName !=null and departmentName !=''">
+                and department_name like concat('%',#{departmentName},'%')
+            </if>
+            <if test="registeredType !=null and registeredType !=''">
+                and registered_type like concat('%',#{registeredType},'%')
+            </if>
+            <if test="registeredPeriod !=null and registeredPeriod !=''">
+                and registered_period like concat('%',#{registeredPeriod},'%')
+            </if>
+            <if test="registeredTime !=null">
+                and registered_time like concat('%',#{registeredTime},'%')
+            </if>
+            <if test="departmentName !=null and departmentName !=''">
+                and department_name like concat('%',#{departmentName},'%')
+            </if>
+        </where>
+        order by registered_id
+    </select>
+
+    <resultMap id="bb" type="Charge">
+        <id property="registeredId" column="registeredId"></id>
+        <result property="departmentId" column="departmentId"></result>
+        <result property="departmentName" column="departmentName"></result>
+        <result property="registeredType" column="registeredType"></result>
+        <result property="registeredPeriod" column="registeredPeriod"></result>
+        <result property="registeredTime" column="registeredTime"></result>
+        <result property="currentNo" column="currentNo"></result>
+    </resultMap>
+
+    <select id="selectType" resultMap="bb">
+        select distinct registered_type registeredType from registered_yjd
+    </select>
+
+    <select id="selectPeriod" resultMap="bb">
+        select distinct registered_period registeredPeriod from registered_yjd
+    </select>
+
+</mapper>

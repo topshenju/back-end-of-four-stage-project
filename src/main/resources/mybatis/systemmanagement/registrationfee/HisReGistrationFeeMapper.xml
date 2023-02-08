@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.systemmanagement.registrationfee.mapper.ReGistRationFeeMapper">
+
+	<resultMap type="ReGistRationFee" id="ReGistRationFeeResult">
+		<id     property="regisId"     column="regis_id"     />
+		<result property="regisName"   column="regis_name"   />
+		<result property="regisKeyWord"   column="regis_keyword"   />
+		<result property="status"     column="status"      />
+		<result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+		<result property="remark"     column="remark" />
+	</resultMap>
+	<sql id="selectReGistRationFee">
+        select
+        d.regis_id, d.regis_name, d.regis_keyword,
+        d.status, d.create_by,
+        d.create_time,d.update_by,d.update_time,d.remark
+        from registrationfee_lyw d
+    </sql>
+	<select id="ReGistRationFeeLList" parameterType="ReGistRationFee" resultMap="ReGistRationFeeResult">
+        <include refid="selectReGistRationFee"/>
+        <where>
+		<if test="regisName != null and regisName != ''">
+			AND d.regis_name like concat('%', #{regisName}, '%')
+		</if>
+
+		<if test="status != null and status != ''">
+			AND d.status = #{status}
+		</if>
+		</where>
+		order by d.regis_id
+    </select>
+	<select id="getALL" resultMap="ReGistRationFeeResult">
+		select distinct check_category from checkcost_lyw;
+	</select>
+
+	<insert id="reGistRationAdd" parameterType="ReGistRationFee">
+		insert into registrationfee_lyw(
+		<if test="regisId != null and regisId != 0">regis_id,</if>
+		<if test="regisName != null and regisName != ''">regis_name,</if>
+		<if test="regisKeyWord != null and regisKeyWord != ''">regis_keyword,</if>
+		<if test="status != null">status,</if>
+		<if test="createBy != null and createBy != ''">create_by,</if>
+		create_time
+		)values(
+		<if test="regisId != null and regisId != 0">#{regisId},</if>
+		<if test="regisName != null and regisName != ''">#{regisName},</if>
+		<if test="regisKeyWord != null and regisKeyWord != ''">#{regisKeyWord},</if>
+		<if test="status != null">#{status},</if>
+		<if test="createBy != null and createBy != ''">#{createBy},</if>
+		#{createTime}
+		)
+	</insert>
+
+	<select id="getReGist" parameterType="Long" resultMap="ReGistRationFeeResult">
+		<include refid="selectReGistRationFee"/>
+		where regis_id = #{regisId}
+	</select>
+
+	<update id="reGistRationupdate" parameterType="ReGistRationFee">
+		update registrationfee_lyw
+		<set>
+			<if test="regisName != null and regisName != ''">regis_name = #{regisName},</if>
+			<if test="regisKeyWord != null and regisKeyWord != ''">regis_keyword = #{regisKeyWord},</if>
+			<if test="status != null and status != ''">status = #{status},</if>
+			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+			update_time = #{updateTime}
+		</set>
+		where regis_id = #{regisId}
+	</update>
+
+     <delete id="reGistRationRemove">
+		 delete from registrationfee_lyw where regis_id in
+		 <foreach collection="regisId" separator="," open="(" close=")" item="regisId">
+			 #{regisId}
+		 </foreach>
+	 </delete>
+
+
+    
+    <select id="selectDeptListByRoleId" resultType="Integer">
+		select d.dept_id
+		from sys_dept d
+            left join sys_role_dept rd on d.dept_id = rd.dept_id
+        where rd.role_id = #{roleId}
+            <if test="deptCheckStrictly">
+              and d.dept_id not in (select d.parent_id from sys_dept d inner join sys_role_dept rd on d.dept_id = rd.dept_id and rd.role_id = #{roleId})
+            </if>
+		order by d.parent_id, d.order_num
+	</select>
+    
+
+    
+    <select id="checkDeptExistUser" parameterType="Long" resultType="int">
+		select count(1) from sys_user where dept_id = #{deptId} and del_flag = '0'
+	</select>
+	
+	<select id="hasChildByDeptId" parameterType="Long" resultType="int">
+		select count(1) from sys_dept
+		where del_flag = '0' and parent_id = #{deptId} limit 1
+	</select>
+	
+	<select id="selectChildrenDeptById" parameterType="Long" resultMap="ReGistRationFeeResult">
+		select * from sys_dept where find_in_set(#{deptId}, ancestors)
+	</select>
+	
+	<select id="selectNormalChildrenDeptById" parameterType="Long" resultType="int">
+		select count(*) from sys_dept where status = 0 and del_flag = '0' and find_in_set(#{deptId}, ancestors)
+	</select>
+	
+	<select id="checkDeptNameUnique" resultMap="ReGistRationFeeResult">
+	    <include refid="selectReGistRationFee"/>
+		where dept_name=#{deptName} and parent_id = #{parentId} limit 1
+	</select>
+
+	
+
+	
+	<update id="updateDeptChildren" parameterType="java.util.List">
+	    update sys_dept set ancestors =
+	    <foreach collection="depts" item="item" index="index"
+	        separator=" " open="case dept_id" close="end">
+	        when #{item.deptId} then #{item.ancestors}
+	    </foreach>
+	    where dept_id in
+	    <foreach collection="depts" item="item" index="index"
+	        separator="," open="(" close=")">
+	        #{item.deptId}
+	    </foreach>
+	</update>
+	 
+	 <update id="updateDeptStatus" parameterType="SysDept">
+ 	    update sys_dept
+ 	    <set>
+ 	        <if test="status != null and status != ''">status = #{status},</if>
+ 	        <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+ 	        update_time = sysdate()
+        </set>
+ 	    where dept_id in (${ancestors})
+	</update>
+	
+	<delete id="deleteDeptById" parameterType="Long">
+		update sys_dept set del_flag = '2' where dept_id = #{deptId}
+	</delete>
+
+</mapper> 
