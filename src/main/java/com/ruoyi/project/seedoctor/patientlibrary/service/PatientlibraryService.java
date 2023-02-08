@@ -16,4 +16,12 @@ public interface PatientlibraryService {
      * @return
      */
     List<Patientlibrary> selectList(Patientlibrary patientlibrary);
+
+
+    /**
+     * 根据身份证号码查询病人信息
+     * @param sick_Certificate
+     * @return
+     */
+    Patientlibrary getRegPatient(String sick_Certificate);
 }

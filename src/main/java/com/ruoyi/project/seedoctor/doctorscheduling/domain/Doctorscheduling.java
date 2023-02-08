@@ -26,5 +26,6 @@ public class Doctorscheduling extends BaseEntity {
     private int doc_sche; //排班
 
 
+    private Scheduling scheduling;
 
 }

@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 	<sql id="selectDeptVo">
-         SELECT d.doc_id,d.dou_doctor,d.doc_department,s.sche_time,s.sche_date,s.`status`
+         SELECT d.doc_id,d.dou_doctor,d.doc_department,s.sche_time,s.sche_date,s.`status`,s.sche_id
          FROM scheduling_dts s join `doctor_dts` d on s.sche_id=d.doc_sche
     </sql>
 
@@ -53,9 +53,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result property="update_time" column="update_time"></result>
 			<result property="remark" column="remark"></result>
 		</association>
+<!--		<id property="doc_id" column="doc_id"></id>-->
+<!--		<result property="dou_doctor" column="dou_doctor"></result>-->
+<!--		<result property="doc_department" column="doc_department"></result>-->
+<!--		<result property="doc_sche" column="doc_sche"></result>-->
+<!--		<result property="create_by" column="create_by"></result>-->
+<!--		<result property="create_time" column="create_time"></result>-->
+<!--		<result property="update_by" column="update_by"></result>-->
+<!--		<result property="update_time" column="update_time"></result>-->
+<!--		<result property="remark" column="remark"></result>-->
+<!--		<association property="scheduling" column="doc_sche" javaType="com.ruoyi.project.seedoctor.doctorscheduling.domain.Scheduling" select="">-->
+
+<!--		</association>-->
+
+
+
 	</resultMap>
-
-
 
 	<select id="selectOne" resultType="Scheduling">
 		select  sche_id,sche_time,sche_date,status,
