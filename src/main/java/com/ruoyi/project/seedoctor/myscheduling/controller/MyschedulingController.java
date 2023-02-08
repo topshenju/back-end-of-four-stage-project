@@ -24,7 +24,7 @@ public class MyschedulingController {
     private MyschedulingService myschedulingService;
 
     @GetMapping("/list")
-    @PreAuthorize("@ss.hasPermi(' seedoctor:myscheduling:query')")
+    @PreAuthorize("@ss.hasPermi('seedoctor:myscheduling:query')")
     public AjaxResult getMyschedu(){
         List<Scheduling2> scheduling2 = myschedulingService.findOne();
         return AjaxResult.success(scheduling2)
