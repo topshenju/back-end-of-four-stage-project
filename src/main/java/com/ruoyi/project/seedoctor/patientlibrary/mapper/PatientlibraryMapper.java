@@ -17,4 +17,7 @@ public interface PatientlibraryMapper {
      * @return
      */
     List<Patientlibrary> selectList(Patientlibrary patientlibrary);
+
+
+    Patientlibrary getRegPatient(String sick_Certificate);
 }

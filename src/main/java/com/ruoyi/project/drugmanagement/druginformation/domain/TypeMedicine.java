@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class TypeMedicine extends BaseEntity {
     /*药品类型id*/
     @Excel(name = "药品类型id")
-    private Long drugtypeId;
+    private String drugtypeId;
     /*药品名称*/
     @Excel(name = "药品名称")
     private String medicineName;

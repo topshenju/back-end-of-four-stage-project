@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.seedoctor.myscheduling.mapper.MyschedulingMapper">
+
+
+	<select id="selectOne" resultMap="rm1">
+		 SELECT d.doc_id,d.dou_doctor,d.doc_department,s.sche_time,s.sche_date,s.`status`
+         FROM scheduling_dts s join `doctor_dts` d on s.sche_id=d.doc_sche where d.doc_id = 1
+	</select>
+
+    <resultMap id="rm1" type="Scheduling">
+        <id property="sche_id" column="sche_id"></id>
+        <result property="sche_time" column="sche_time"></result>
+        <result property="sche_date" column="sche_date"></result>
+        <result property="status" column="status"></result>
+        <result property="create_by" column="create_by"></result>
+        <result property="create_time" column="create_time"></result>
+        <result property="update_by" column="update_by"></result>
+        <result property="update_time" column="update_time"></result>
+        <result property="remark" column="remark"></result>
+        <association property="doctorscheduling" javaType="Doctorscheduling">
+            <id property="doc_id" column="doc_id"></id>
+            <result property="dou_doctor" column="dou_doctor"></result>
+            <result property="doc_department" column="doc_department"></result>
+            <result property="doc_sche" column="doc_sche"></result>
+            <result property="create_by" column="create_by"></result>
+            <result property="create_time" column="create_time"></result>
+            <result property="update_by" column="update_by"></result>
+            <result property="update_time" column="update_time"></result>
+            <result property="remark" column="remark"></result>
+        </association>
+    </resultMap>
+</mapper> 

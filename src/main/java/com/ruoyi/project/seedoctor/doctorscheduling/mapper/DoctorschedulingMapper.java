@@ -20,4 +20,7 @@ public interface DoctorschedulingMapper {
 
     //查询单个医生排班详情
     Scheduling selectOne(Integer sche_id);
+
+
+
 }

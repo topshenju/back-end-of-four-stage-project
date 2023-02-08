@@ -27,7 +27,7 @@ public class PatientlibraryController extends BaseController {
     //患者查询
     @GetMapping("/list")
     @PreAuthorize("@ss.hasPermi('seedoctor:patientlibrary:query')")
-    public TableDataInfo list(Patientlibrary patientlibrary){
+    public TableDataInfo listRegPatient(Patientlibrary patientlibrary){
         //分页相关,处理请求参数pageNum，pageSize等。并使用PageHelper处理分页查询
         startPage();
 
