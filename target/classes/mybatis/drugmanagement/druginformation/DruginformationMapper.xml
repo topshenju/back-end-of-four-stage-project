@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.drugmanagement.druginformation.mapper.DruginformationMapper">
+
+    <resultMap id="DruginformationResult" type="Druginformation">
+        <id property="maintenanceId" column="maintenance_id"/>
+        <result property="maintenanceName" column="maintenance_name"/>
+        <result property="maintenanceNum" column="maintenance_num"/>
+        <result property="manufacturerId" column="manufacturer_id"/>
+        <result property="drugtypeId" column="drugtype_id"/>
+        <result property="prescriptionId" column="prescription_id"/>
+        <result property="unit" column="unit"/>
+        <result property="prescriptionPrice" column="prescription_price"/>
+        <result property="inventory" column="inventory"/>
+        <result property="warningValue" column="warning_value"/>
+        <result property="conversionAmount" column="conversion_amount"/>
+        <result property="supplierIds" column="supplier_ids"/>
+        <result property="keyword" column="keyword"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <association property="typeMedicine" javaType="typeMedicine">
+            <id property="drugtypeId" column="drugtype_id"/>
+            <result property="medicineName" column="medicine_name"/>
+        </association>
+        <association property="typePrescription" javaType="typePrescription">
+            <id property="prescriptionId" column="prescription_id"/>
+            <result property="prescriptionName" column="prescription_name"/>
+        </association>
+        <association property="manufacturer" javaType="manufacturer">
+            <id property="manufacturerId" column="manufacturer_id"/>
+            <result property="manufacturerName" column="manufacturer_name"/>
+        </association>
+    </resultMap>
+
+
+    <sql id="selectDruginformationVo">
+        SELECT
+            s.maintenance_id,
+            s.maintenance_name,
+            s.maintenance_num,
+            m.manufacturer_id,
+            m.manufacturer_name,
+            t.drugtype_id,
+            p.prescription_id,
+            t.medicine_name,
+            p.prescription_name,
+            s.unit,
+            s.prescription_price,
+            s.inventory,
+            s.warning_value,
+            s.conversion_amount,
+            s.keyword,
+            s.STATUS,
+            s.create_by,
+            s.create_time,
+            s.update_by,
+            s.update_time,
+            s.remark
+        FROM
+            druginformation_maintenance s
+        left join manufacturer_maintenance m
+        on  s.manufacturer_id = m.manufacturer_id
+        left join type_medicine t
+        on  s.drugtype_id = t.drugtype_id
+        left join type_prescription p
+        on s.prescription_id = p.prescription_id
+    </sql>
+
+
+    <!--删除-->
+    <delete id="batchDelete">
+        delete from druginformation_maintenance
+        where maintenance_id in
+        <foreach collection="maintenanceIds" separator="," open="(" close=")" item="maintenanceId">
+            #{maintenanceId}
+        </foreach>
+    </delete>
+    <!--更新-->
+    <update id="update" parameterType="Supplier">
+        update druginformation_maintenance
+        <set>
+            <if test="maintenanceName != null and maintenanceName != ''">maintenance_name = #{maintenanceName},</if>
+            <if test="maintenanceNum != null and maintenanceNum != ''">maintenance_num = #{maintenanceNum},</if>
+            <if test="manufacturerId != null and manufacturerId != 0">manufacturer_id = #{manufacturerId},</if>
+            <if test="drugtypeId != null and drugtypeId != 0">drugtype_id = #{drugtypeId},</if>
+            <if test="prescriptionId != null and prescriptionId != 0">prescription_id = #{prescriptionId},</if>
+            <if test="unit != null and unit != ''">unit = #{unit},</if>
+            <if test="prescriptionPrice != null and prescriptionPrice != ''">prescription_price = #{prescriptionPrice},</if>
+            <if test="inventory != null and inventory != ''">inventory = #{inventory},</if>
+            <if test="warningValue != null and warningValue != ''">warning_value = #{warningValue},</if>
+            <if test="conversionAmount != null and conversionAmount != ''">conversion_amount = #{conversionAmount},</if>
+            <if test="keyword != null and keyword != ''">keyword = #{keyword},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = #{updateTime}
+        </set>
+        where maintenance_id = #{maintenanceId}
+    </update>
+
+    <!--根据主键进行查询-->
+    <select id="selectById" parameterType="Long" resultMap="DruginformationResult">
+        <include refid="selectDruginformationVo"/>
+        where maintenance_id = #{maintenanceId}
+    </select>
+
+    <!--新增-->
+    <insert id="insert" parameterType="Druginformation">
+        insert into druginformation_maintenance(
+        <if test="maintenanceId != null and maintenanceId != 0">maintenance_id,</if>
+        <if test="maintenanceName != null and maintenanceName != ''">maintenance_name,</if>
+        <if test="maintenanceNum != null and maintenanceNum != ''">maintenance_num,</if>
+        <if test="manufacturerId != null and manufacturerId != ''">manufacturer_id,</if>
+        <if test="drugtypeId != null and drugtypeId != ''">drugtype_id,</if>
+        <if test="prescriptionId != null and prescriptionId != ''">prescription_id,</if>
+        <if test="unit != null and unit != ''">unit,</if>
+        <if test="prescriptionPrice != null and prescriptionPrice != ''">prescription_price,</if>
+        <if test="inventory != null and inventory != ''">inventory,</if>
+        <if test="warningValue != null and warningValue != ''">warning_value,</if>
+        <if test="conversionAmount != null and conversionAmount != ''">conversion_amount,</if>
+        <if test="keyword != null and keyword != ''">keyword,</if>
+        <if test="status != null">status,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        ) values (
+        <if test="maintenanceId != null and maintenanceId != 0">#{maintenanceId},</if>
+        <if test="maintenanceName != null and maintenanceName != ''">#{maintenanceName},</if>
+        <if test="maintenanceNum != null and maintenanceNum != ''">#{maintenanceNum},</if>
+        <if test="manufacturerId != null and manufacturerId != ''">#{manufacturerId},</if>
+        <if test="drugtypeId != null and drugtypeId != ''">#{drugtypeId},</if>
+        <if test="prescriptionId != null and prescriptionId != ''">#{prescriptionId},</if>
+        <if test="unit != null and unit != ''">#{unit},</if>
+        <if test="prescriptionPrice != null and prescriptionPrice != ''">#{prescriptionPrice},</if>
+        <if test="inventory != null and inventory != ''">#{inventory},</if>
+        <if test="warningValue != null and warningValue != ''">#{warningValue},</if>
+        <if test="conversionAmount != null and conversionAmount != ''">#{conversionAmount},</if>
+        <if test="keyword != null and keyword != ''">#{keyword},</if>
+        <if test="status != null">#{status},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        #{createTime}
+        )
+    </insert>
+
+    <!--分页查询全部-->
+    <select id="selectList" parameterType="Druginformation" resultMap="DruginformationResult">
+        <include refid="selectDruginformationVo"/>
+        <where>
+            <if test="maintenanceName != null and maintenanceName != ''">
+                AND s.maintenance_name like concat('%', #{maintenanceName}, '%')
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND s.keyword like concat('%', #{keyword}, '%')
+            </if>
+            <if test="drugtypeId != null and drugtypeId != ''">
+                AND s.drugtype_id = #{drugtypeId}
+            </if>
+            <if test="manufacturerId != null and manufacturerId != ''">
+                AND s.manufacturer_id = #{manufacturerId}
+            </if>
+            <if test="prescriptionId != null and prescriptionId != ''">
+                AND s.prescription_id = #{prescriptionId}
+            </if>
+            <if test="status != null and status != ''">
+                AND s.status = #{status}
+            </if>
+        </where>
+        order by s.maintenance_id
+    </select>
+
+
+
+</mapper>

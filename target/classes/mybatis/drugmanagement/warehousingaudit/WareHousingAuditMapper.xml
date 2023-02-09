@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.project.drugmanagement.warehousingaudit.mapper.WareHousingAuditMapper">
+    <resultMap id="aa" type="Drug">
+        <id property="documentsId" column="documentsId"></id>
+        <result property="supplier" column="supplier"></result>
+        <result property="totalPurchase" column="totalPurchase"></result>
+        <result property="status" column="status"></result>
+        <result property="applicant" column="applicant"></result>
+        <result property="warehousingOperator" column="warehousingOperator"></result>
+        <result property="storageTime" column="storageTime"></result>
+        <result property="createTime" column="createTime"></result>
+    </resultMap>
+
+    <sql id="sql">
+        select w.documents_id documentsId,w.supplier supplier,w.total_purchase totalPurchase,
+        w.status status,w.applicant applicant,w.warehousing_operator warehousingOperator,
+        w.storage_time storageTime,w.create_time createTime from warehousingaudit_yjd w
+    </sql>
+
+    <select id="selectMore" resultMap="aa">
+        <include refid="sql"/>
+        <where>
+            <if test="supplier !=null and supplier != ''">
+                and w.supplier like concat('%',#{supplier},'%')
+            </if>
+            <if test="applicant !=null and applicant !=''">
+                and w.applicant like concat('%',#{applicant},'%')
+            </if>
+            <if test="status !=null and status !=''">
+                and w.status=#{status}
+            </if>
+        </where>
+        order by documents_id
+    </select>
+
+    <update id="updateOne">
+        update warehousingaudit_yjd set status='0' where documents_id=#{param1}
+    </update>
+
+    <update id="update">
+        update warehousingaudit_yjd set status='1' where documents_id=#{param1}
+    </update>
+
+</mapper>

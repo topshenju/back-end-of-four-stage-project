@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.project.drugmanagement.inventory.mapper.InventoryMapper">
+    <resultMap id="aa" type="Inventory">
+        <id property="drugId" column="drugId"></id>
+        <result property="drugName" column="drugName"></result>
+        <result property="inventory" column="inventory"></result>
+        <result property="warningValue" column="warningValue"></result>
+        <result property="manufacturer" column="manufacturer"></result>
+        <result property="drugType" column="drugType"></result>
+        <result property="prescriptionType" column="prescriptionType"></result>
+        <result property="unit" column="unit"></result>
+        <result property="conversionOf" column="conversionOf"></result>
+        <result property="wholesaleNumber" column="wholesaleNumber"></result>
+        <result property="wholesalePrice" column="wholesalePrice"></result>
+        <result property="wholesaleTotalPrice" column="wholesaleTotalPrice"></result>
+        <result property="wholesaleNo" column="wholesaleNo"></result>
+        <result property="createTime" column="createTime"></result>
+    </resultMap>
+
+    <sql id="sql">
+        select i.drug_id drugId,i.drug_name drugName,i.wholesale_number wholesaleNumber,i.wholesale_price wholesalePrice,
+        i.wholesale_total_price wholesaleTotalPrice,i.wholesale_no wholesaleNo,i.create_time createTime,i.inventory inventory,
+        i.warning_value warningValue,i.manufacturer manufacturer,i.drug_type drugType,i.prescription_type prescriptionType,
+        i.unit unit,i.conversion_of conversionOf from inventory_yjd i
+    </sql>
+    
+    <select id="selectMore" resultMap="aa">
+        <include refid="sql"/>
+        <where>
+            <if test="drugName !=null and drugName !=''">
+                and drug_name like concat('%',#{drugName},'%')
+            </if>
+            <if test="drugType !=null and drugType !=''">
+                and drug_type like concat('%',#{drugType},'%')
+            </if>
+            <if test="manufacturer !=null and manufacturer !=''">
+                and manufacturer like concat('%',#{manufacturer},'%')
+            </if>
+            <if test="prescriptionType !=null and prescriptionType !=''">
+                and prescription_type like concat('%',#{prescriptionType},'%')
+            </if>
+        </where>
+        order by drugId
+    </select>
+
+    <select id="findType" resultMap="bb">
+        select distinct prescription_type from inventory_yjd
+    </select>
+
+    <resultMap id="bb" type="inventory">
+        <result property="prescriptionType" column="prescription_type"></result>
+    </resultMap>
+
+    <select id="selectBatch" resultMap="aa">
+        <include refid="sql"/>
+        <where>
+            <if test="drugId !=null and drugId !=''">
+                and drug_id like concat('%',#{drugId},'%')
+            </if>
+            <if test="drugName !=null and drugName !=''">
+                and drug_name like concat('%',#{drugName},'%')
+            </if>
+            <if test="drugType !=null and drugType !=''">
+                and drug_type like concat('%',#{drugType},'%')
+            </if>
+            <if test="manufacturer !=null and manufacturer !=''">
+                and manufacturer like concat('%',#{manufacturer},'%')
+            </if>
+            <if test="prescriptionType !=null and prescriptionType !=''">
+                and prescription_type like concat('%',#{prescriptionType},'%')
+            </if>
+            <if test="createTime !=null and createTime !=''">
+                and create_time like concat('%',#{createTime},'%')
+            </if>
+        </where>
+        order by drugId
+    </select>
+
+    <select id="findFactory" resultMap="aa">
+        select distinct manufacturer manufacturer from inventory_yjd
+    </select>
+
+    <select id="findDrug" resultMap="aa">
+        select distinct drug_type drugType from inventory_yjd
+    </select>
+
+</mapper>

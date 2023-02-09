@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.chargemanagement.refundquery.mapper.RefMapper">
+
+    <resultMap type="Ref" id="RefResult">
+        <result property="chargregid" column="charg_reg_id"/>
+        <result property="presregid" column="pres_reg_id"/>
+        <result property="prespatientname" column="pres_patient_name"/>
+        <result property="reftfmoney" column="ref_tfmoney"/>
+        <result property="reftfpayment" column="ref_tfpayment"/>
+        <result property="refstatus" column="ref_status"/>
+        <result property="reftime" column="ref_time"/>
+        <result property="refcaozuo" column="ref_caozuo"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectRefVo">
+        select ch.charg_reg_id, ch.pres_reg_id, ch.pres_patient_name, re.ref_tfmoney, re.ref_tfpayment,
+        re.ref_status,re.ref_time,re.ref_caozuo, re.create_by, re.create_time, re.remark
+		from refundquery1_lpz re
+		join chargequery_lpz ch
+		on re.charg_reg_id=ch.charg_reg_id
+    </sql>
+
+    <select id="selectOne" parameterType="Ref" resultMap="RefResult">
+        <include refid="selectRefVo"/>
+        <where>
+            <if test="presregid != null and presregid != ''">
+                AND pres_reg_id like concat('%', #{presregid}, '%')
+            </if>
+
+            <if test="prespatientname != null and prespatientname != ''">
+				AND pres_patient_name like concat('%', #{prespatientname}, '%')
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper> 

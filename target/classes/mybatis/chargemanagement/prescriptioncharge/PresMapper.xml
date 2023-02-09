@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.chargemanagement.prescriptioncharge.mapper.PresMapper">
+
+    <resultMap type="Pres" id="PresResult">
+        <result property="chargregid" column="charg_reg_id"/>
+        <result property="presregid" column="pres_reg_id"/>
+        <result property="yisname" column="yis_name"/>
+        <result property="patientname" column="patient_name"/>
+        <result property="prespatientname" column="pres_patient_name"/>
+
+        <result property="presjiuzhentime" column="pres_jiuzhentime"/>
+        <result property="preszhusu" column="pres_zhusu"/>
+        <result property="presxinxi" column="pres_xinxi"/>
+        <result property="presjianyi" column="pres_jianyi"/>
+
+
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="selectPoVo">
+      SELECT ch.pres_reg_id,pr.yis_name,pr.patient_name,ch.pres_patient_name,
+      pr.pres_jiuzhentime,pr.pres_zhusu,pr.pres_xinxi,pr.pres_jianyi FROM chargequery_lpz  ch
+       JOIN prescriptioncharge_lpz  pr
+       on ch.charg_reg_id=pr.charg_reg_id
+    </sql>
+
+    <select id="selectPo" parameterType="Pres" resultMap="PresResult">
+        <include refid="selectPoVo"/>
+        <where>
+            <if test="presregid != null and presregid != ''">
+                AND pres_reg_id like concat('%', #{presregid}, '%')
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper> 

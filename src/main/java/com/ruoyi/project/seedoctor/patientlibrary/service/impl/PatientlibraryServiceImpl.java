@@ -28,4 +28,9 @@ public class PatientlibraryServiceImpl implements PatientlibraryService {
         List<Patientlibrary> list = patientlibraryMapper.selectList(patientlibrary);
         return list;
     }
+
+    @Override
+    public Patientlibrary getRegPatient(String sick_Certificate) {
+        return patientlibraryMapper.getRegPatient(sick_Certificate);
+    }
 }
