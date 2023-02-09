@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.chargemanagement.refundquery.mapper.Refundquery1LpzreMapper">
+
+    <resultMap type="Refundquery1Lpzre" id="Refundquery1LpzreResult">
+        <result property="chargRegId" column="charg_reg_id"/>
+        <result property="presRegId" column="pres_reg_id"/>
+        <result property="presPatientName" column="pres_patient_name"/>
+        <result property="refTfmoney" column="ref_tfmoney"/>
+        <result property="refTfpayment" column="ref_tfpayment"/>
+        <result property="refStatus" column="ref_status"/>
+        <result property="refTime" column="ref_time"/>
+        <result property="refCaozuo" column="ref_caozuo"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remark" column="remark"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+    </resultMap>
+    <sql id="selectRefundquery1LpzreVo"> select charg_reg_id, pres_reg_id, pres_patient_name, ref_tfmoney, ref_tfpayment, ref_status, ref_time, ref_caozuo, create_by, create_time, remark, update_time, update_by from refundquery1_lpzre </sql>
+    <select id="selectRefundquery1LpzreList" parameterType="Refundquery1Lpzre" resultMap="Refundquery1LpzreResult">
+        <include refid="selectRefundquery1LpzreVo"/>
+        <where>
+            <if test="chargRegId != null and chargRegId != ''"> and charg_reg_id = #{chargRegId}</if>
+            <if test="presRegId != null and presRegId != ''"> and pres_reg_id = #{presRegId}</if>
+            <if test="presPatientName != null and presPatientName != ''"> and pres_patient_name like concat('%', #{presPatientName}, '%')</if>
+            <if test="refTfmoney != null "> and ref_tfmoney = #{refTfmoney}</if>
+            <if test="refTfpayment != null and refTfpayment != ''"> and ref_tfpayment = #{refTfpayment}</if>
+            <if test="refStatus != null and refStatus != ''"> and ref_status = #{refStatus}</if>
+            <if test="refTime != null "> and ref_time = #{refTime}</if>
+            <if test="refCaozuo != null and refCaozuo != ''"> and ref_caozuo = #{refCaozuo}</if>
+        </where>
+    </select>
+    <select id="selectRefundquery1LpzreById" parameterType="String" resultMap="Refundquery1LpzreResult">
+        <include refid="selectRefundquery1LpzreVo"/>
+        where charg_reg_id = #{chargRegId}
+    </select>
+    <insert id="insertRefundquery1Lpzre" parameterType="Refundquery1Lpzre">
+        insert into refundquery1_lpzre
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chargRegId != null">charg_reg_id,</if>
+            <if test="presRegId != null and presRegId != ''">pres_reg_id,</if>
+            <if test="presPatientName != null">pres_patient_name,</if>
+            <if test="refTfmoney != null">ref_tfmoney,</if>
+            <if test="refTfpayment != null">ref_tfpayment,</if>
+            <if test="refStatus != null">ref_status,</if>
+            <if test="refTime != null">ref_time,</if>
+            <if test="refCaozuo != null">ref_caozuo,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chargRegId != null">#{chargRegId},</if>
+            <if test="presRegId != null and presRegId != ''">#{presRegId},</if>
+            <if test="presPatientName != null">#{presPatientName},</if>
+            <if test="refTfmoney != null">#{refTfmoney},</if>
+            <if test="refTfpayment != null">#{refTfpayment},</if>
+            <if test="refStatus != null">#{refStatus},</if>
+            <if test="refTime != null">#{refTime},</if>
+            <if test="refCaozuo != null">#{refCaozuo},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+    <update id="updateRefundquery1Lpzre" parameterType="Refundquery1Lpzre">
+        update refundquery1_lpzre
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="presRegId != null and presRegId != ''">pres_reg_id = #{presRegId},</if>
+            <if test="presPatientName != null">pres_patient_name = #{presPatientName},</if>
+            <if test="refTfmoney != null">ref_tfmoney = #{refTfmoney},</if>
+            <if test="refTfpayment != null">ref_tfpayment = #{refTfpayment},</if>
+            <if test="refStatus != null">ref_status = #{refStatus},</if>
+            <if test="refTime != null">ref_time = #{refTime},</if>
+            <if test="refCaozuo != null">ref_caozuo = #{refCaozuo},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where charg_reg_id = #{chargRegId}
+    </update>
+    <delete id="deleteRefundquery1LpzreById" parameterType="String"> delete from refundquery1_lpzre where charg_reg_id = #{chargRegId} </delete>
+    <delete id="deleteRefundquery1LpzreByIds" parameterType="String">
+        delete from refundquery1_lpzre where charg_reg_id in
+        <foreach item="chargRegId" collection="array" open="(" separator="," close=")"> #{chargRegId} </foreach>
+    </delete>
+</mapper>
