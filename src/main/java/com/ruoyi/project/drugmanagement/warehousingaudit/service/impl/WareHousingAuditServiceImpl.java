@@ -61,9 +61,19 @@ public class WareHousingAuditServiceImpl implements WareHousingAuditService {
         public void changeNumber(String documentsId) {
         //审核通过后再入库审核处删除
         String s = String.valueOf(documentsId);
-//        wareHousingAuditMapper.deleteWareHousingAudit(s);
+        wareHousingAuditMapper.deleteWareHousingAudit(s);
         //添加至库存查询中批次库存和价格列表中
         List<Inventory> inventories = wareHousingAuditMapper.selectByRelation();
+                //将查询出的药品数量添加到总库存中
+//        Druginformation druginformation =new Druginformation();
+//        for(int i=0;i<inventories.size();i++){
+//            Inventory inventory = inventories.get(i);
+//            System.out.println("123");
+//
+//            druginformation.setInventory(inventory.getInventory());
+//            druginformationMapper.update(druginformation);
+//        }
+
         for(int i=0;i<inventories.size();i++){
             System.out.println("进入"+inventories);
             inventories.get(i).setCreateTime(new Date());
