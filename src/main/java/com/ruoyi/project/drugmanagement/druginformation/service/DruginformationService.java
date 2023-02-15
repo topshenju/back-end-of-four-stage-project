@@ -7,10 +7,7 @@ import com.ruoyi.project.drugmanagement.manufacturer.domain.Manufacturer;
 
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-15 13:58
- **/
+
 public interface DruginformationService {
     /**
      * 根据查询条件，访问数据库，查询厂家

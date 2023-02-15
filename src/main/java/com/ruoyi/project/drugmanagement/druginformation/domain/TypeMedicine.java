@@ -6,11 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * 药品类型
- * @author vincent
- * @data 2021-7-15 9:56
- **/
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

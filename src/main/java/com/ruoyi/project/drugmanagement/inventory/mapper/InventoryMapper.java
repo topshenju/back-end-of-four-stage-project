@@ -5,10 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-/**
- * @Author Ada
- * @Date 2021/7/14 13:56
- */
+
 @Mapper
 public interface InventoryMapper {
 
@@ -22,5 +19,13 @@ public interface InventoryMapper {
     List<Inventory> findFactory();
 
     List<Inventory> findDrug();
+
+    /**
+     * 新增【请填写功能名称】
+     *
+     * @param  【请填写功能名称】
+     * @return 结果
+     */
+     void insertInventory(Inventory inventory);
 
 }

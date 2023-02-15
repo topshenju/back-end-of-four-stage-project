@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-15 13:59
- **/
+
 @Service
 public class DruginformationServiceImpl implements DruginformationService {
     @Autowired

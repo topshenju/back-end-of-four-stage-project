@@ -6,10 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-14 10:07
- **/
+
 @Mapper
 public interface SupplierMapper {
     /**

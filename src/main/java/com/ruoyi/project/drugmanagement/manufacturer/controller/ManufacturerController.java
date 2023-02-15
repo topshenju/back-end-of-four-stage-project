@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-13 14:24
- **/
+
 @RestController
 @RequestMapping("/drugmanagement/manufacturer")
 public class ManufacturerController extends BaseController {

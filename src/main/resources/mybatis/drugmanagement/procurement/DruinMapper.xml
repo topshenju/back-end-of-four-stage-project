@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.drugmanagement.procurement.mapper.DruinMapper">
+
+    <resultMap id="DruginResult" type="DruDrug">
+        <id property="ddid" column="maintenance_id"/>
+        <result property="ddName" column="maintenance_name"/>
+        <result property="ddCoding" column="maintenance_num"/>
+        <result property="dmid" column="manufacturer_id"/>
+        <result property="ddType" column="drugtype_id"/>
+        <result property="ddPrescriptionType" column="prescription_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+<!--    <association property="druManufacturer" javaType="druManufacturer">-->
+<!--        <id property="dmid" column="prescription_id"/>-->
+<!--        <result property="dmName" column="manufacturer_name"/>-->
+<!--    </association>-->
+    <!--    private Integer ddid;  // 药品ID-->
+<!--    private String ddName;  // 药品名称-->
+<!--    private String ddCoding;  // 药品编码-->
+<!--    private Integer dmid;  // 生产厂家-->
+<!--    private String ddType;  // 药品类型-->
+<!--    private String ddPrescriptionType;  // 处方类型-->
+<!--    private String ddUnit;  // 单位-->
+<!--    private Double ddPrice;  // 处方价格-->
+<!--    private Integer ddNum;  // 库存量-->
+<!--    private Integer ddEarlyWarning;  // 预警值-->
+<!--    private Integer ddMatrixing;  // 换算量-->
+<!--    private String ddState;  // 状态-->
+<!--    private String ddKeyword;  // 关键字-->
+<!--    private DruManufacturer druManufacturer;  // 生产厂家对象-->
+<!--    private Integer dmid;  // 厂家ID-->
+<!--    private String dmName;  // 厂家名称-->
+<!--    private String dmCoding;  // 厂家编码-->
+<!--    private String dmContactName;  // 联系人-->
+<!--    private String dmPhone;  // 电话-->
+<!--    private String dmKeyword;  // 关键字-->
+<!--    private String dmState;  // 状态-->
+<!--    private String dmSite;  // 厂家地址-->
+
+    <sql id="selectDruginVo" >
+        SELECT
+            s.maintenance_id as ddid,
+            s.maintenance_name as ddName,
+            s.maintenance_num as ddCoding,
+            m.manufacturer_name as dmid,
+            t.drugtype_id as ddType,
+            p.prescription_id as ddPrescriptionType,
+            s.unit as ddUnit,
+            s.prescription_price as ddPrice,
+            s.inventory as ddNum,
+            s.warning_value as ddEarlyWarning,
+            s.conversion_amount as ddMatrixing,
+            s.STATUS as ddState,
+            s.keyword as ddKeyword,
+            s.create_by as createBy,
+            s.create_time as createTime,
+            s.update_by as updateBy,
+            s.update_time as updateTime,
+            s.remark as remark
+        FROM
+            druginformation_maintenance s
+                left join manufacturer_maintenance m
+                          on  s.manufacturer_id = m.manufacturer_id
+                left join type_medicine t
+                          on  s.drugtype_id = t.drugtype_id
+
+                left join type_prescription p
+                          on s.prescription_id = p.prescription_id
+    </sql>
+
+
+<!--    &lt;!&ndash;删除&ndash;&gt;-->
+<!--    <delete id="batchDelete">-->
+<!--        delete from druginformation_maintenance-->
+<!--        where maintenance_id in-->
+<!--        <foreach collection="maintenanceIds" separator="," open="(" close=")" item="maintenanceId">-->
+<!--            #{maintenanceId}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+<!--    &lt;!&ndash;更新&ndash;&gt;-->
+<!--    <update id="update" parameterType="Supplier">-->
+<!--        update druginformation_maintenance-->
+<!--        <set>-->
+<!--            <if test="maintenanceName != null and maintenanceName != ''">maintenance_name = #{maintenanceName},</if>-->
+<!--            <if test="maintenanceNum != null and maintenanceNum != ''">maintenance_num = #{maintenanceNum},</if>-->
+<!--            <if test="manufacturerId != null and manufacturerId != 0">manufacturer_id = #{manufacturerId},</if>-->
+<!--            <if test="drugtypeId != null and drugtypeId != 0">drugtype_id = #{drugtypeId},</if>-->
+<!--            <if test="prescriptionId != null and prescriptionId != 0">prescription_id = #{prescriptionId},</if>-->
+<!--            <if test="unit != null and unit != ''">unit = #{unit},</if>-->
+<!--            <if test="prescriptionPrice != null and prescriptionPrice != ''">prescription_price = #{prescriptionPrice},</if>-->
+<!--            <if test="inventory != null and inventory != ''">inventory = #{inventory},</if>-->
+<!--            <if test="warningValue != null and warningValue != ''">warning_value = #{warningValue},</if>-->
+<!--            <if test="conversionAmount != null and conversionAmount != ''">conversion_amount = #{conversionAmount},</if>-->
+<!--            <if test="keyword != null and keyword != ''">keyword = #{keyword},</if>-->
+<!--            <if test="status != null and status != ''">status = #{status},</if>-->
+<!--            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>-->
+<!--            update_time = #{updateTime}-->
+<!--        </set>-->
+<!--        where maintenance_id = #{maintenanceId}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash;根据主键进行查询&ndash;&gt;-->
+<!--    <select id="selectById" parameterType="Long" resultMap="DruginformationResult">-->
+<!--        <include refid="selectDruginformationVo"/>-->
+<!--        where maintenance_id = #{maintenanceId}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;新增&ndash;&gt;-->
+<!--    <insert id="addDrug" parameterType="Druginformation">-->
+<!--        insert into druginformation_maintenance(-->
+<!--        <if test="maintenanceId != null and maintenanceId != 0">maintenance_id,</if>-->
+<!--        <if test="maintenanceName != null and maintenanceName != ''">maintenance_name,</if>-->
+<!--        <if test="maintenanceNum != null and maintenanceNum != ''">maintenance_num,</if>-->
+<!--        <if test="manufacturerId != null and manufacturerId != ''">manufacturer_id,</if>-->
+<!--        <if test="drugtypeId != null and drugtypeId != ''">drugtype_id,</if>-->
+<!--        <if test="prescriptionId != null and prescriptionId != ''">prescription_id,</if>-->
+<!--        <if test="unit != null and unit != ''">unit,</if>-->
+<!--        <if test="prescriptionPrice != null and prescriptionPrice != ''">prescription_price,</if>-->
+<!--        <if test="inventory != null and inventory != ''">inventory,</if>-->
+<!--        <if test="warningValue != null and warningValue != ''">warning_value,</if>-->
+<!--        <if test="conversionAmount != null and conversionAmount != ''">conversion_amount,</if>-->
+<!--        <if test="keyword != null and keyword != ''">keyword,</if>-->
+<!--        <if test="status != null">status,</if>-->
+<!--        <if test="createBy != null and createBy != ''">create_by,</if>-->
+<!--        create_time-->
+<!--        ) values (-->
+<!--        <if test="maintenanceId != null and maintenanceId != 0">#{maintenanceId},</if>-->
+<!--        <if test="maintenanceName != null and maintenanceName != ''">#{maintenanceName},</if>-->
+<!--        <if test="maintenanceNum != null and maintenanceNum != ''">#{maintenanceNum},</if>-->
+<!--        <if test="manufacturerId != null and manufacturerId != ''">#{manufacturerId},</if>-->
+<!--        <if test="drugtypeId != null and drugtypeId != ''">#{drugtypeId},</if>-->
+<!--        <if test="prescriptionId != null and prescriptionId != ''">#{prescriptionId},</if>-->
+<!--        <if test="unit != null and unit != ''">#{unit},</if>-->
+<!--        <if test="prescriptionPrice != null and prescriptionPrice != ''">#{prescriptionPrice},</if>-->
+<!--        <if test="inventory != null and inventory != ''">#{inventory},</if>-->
+<!--        <if test="warningValue != null and warningValue != ''">#{warningValue},</if>-->
+<!--        <if test="conversionAmount != null and conversionAmount != ''">#{conversionAmount},</if>-->
+<!--        <if test="keyword != null and keyword != ''">#{keyword},</if>-->
+<!--        <if test="status != null">#{status},</if>-->
+<!--        <if test="createBy != null and createBy != ''">#{createBy},</if>-->
+<!--        #{createTime}-->
+<!--        )-->
+<!--    </insert>-->
+
+    <!--分页查询全部-->
+    <select id="selectList" parameterType="DruDrug" resultType="DruDrug">
+        <include refid="selectDruginVo"/>
+        <where>
+            <if test="ddName != null and ddName != ''">
+                AND s.maintenance_name like concat('%', #{ddName}, '%')
+            </if>
+            <if test="ddType != null and ddType != ''">
+                AND s.drugtype_id = #{ddType}
+            </if>
+            <if test="ddPrescriptionType != null and ddPrescriptionType != ''">
+                AND s.prescription_id = #{ddPrescriptionType}
+            </if>
+        </where>
+        order by s.maintenance_id
+    </select>
+
+    <select id="selectDdType" resultType="DruDrug">
+        SELECT
+            drugtype_id as ddType
+        FROM  type_medicine
+    </select>
+
+    <select id="selectPrescriptionType" resultType="DruDrug">
+        SELECT
+            prescription_id as ddPrescriptionType
+        FROM  type_prescription
+    </select>
+
+
+
+</mapper>

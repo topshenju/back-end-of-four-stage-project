@@ -10,10 +10,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-15 9:25
- **/
+
 @Mapper
 public interface DruginformationMapper {
 

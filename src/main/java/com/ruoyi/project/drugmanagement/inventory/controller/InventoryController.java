@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @Author Ada
- * @Date 2021/7/14 13:57
- */
+
 @RestController
 @RequestMapping("/system/inventory")
 public class InventoryController extends BaseController {
@@ -46,7 +43,7 @@ public class InventoryController extends BaseController {
         System.out.println(inventory);
         System.out.println("进入批次查询单元");
         List<Inventory> batch = inventoryService.findBatch(inventory);
-        System.out.println(batch);
+        System.out.println("查询出来的结果"+batch);
         return getDataTable(batch);
     }
 

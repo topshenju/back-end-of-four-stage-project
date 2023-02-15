@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.drugmanagement.procurement.mapper.DruPurchaseMapper">
+
+    <resultMap id="DruPurchaseResult" type="DruPurchase">
+        <id property="dpid" column="procurement_id"/>
+        <result property="dsid" column="procurement_dsid"/>
+        <result property="dpTotalAmount" column="procurement_dpTotalAmount"/>
+        <result property="dpState" column="procurement_dpState"/>
+        <result property="applyUser" column="procurement_applyUser"/>
+        <result property="operationUser" column="procurement_operationUser"/>
+        <result property="enterDate" column="procurement_enterDate"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!--分页查询全部-->
+    <select id="selectAll" parameterType="DruPurchase" resultType="com.ruoyi.project.drugmanagement.procurement.domain.DruPurchase">
+        select w.documents_id as dpid,
+                w.supplier as dsid,
+                w.total_purchase as dpTotalAmount,
+                w.status as dpState,
+                w.applicant as applyUser,
+                w.warehousing_operator as operationUser,
+                w.storage_time as enterDate,
+                w.create_time as createTime
+                from warehousingaudit_yjd w
+        <where>
+            <if test="dsid != null and dsid != '' "> and w.supplier = #{dsid}</if>
+            <if test="dpState != null  and dpState != ''"> and w.status = #{dpState}</if>
+            <if test="applyUser != null  and applyUser != ''"> and  w.applicant = #{applyUser}</if>
+        </where>
+    </select>
+
+
+    <!-- 新增-->
+    <insert id="insert" parameterType="DruPurchase">
+        insert into warehousingaudit_yjd(
+        <if test="dpid != null and dpid != ''">documents_id,</if>
+        <if test="dsid != null and dsid != 0">supplier,</if>
+        <if test="dpTotalAmount != null and dpTotalAmount != 0">total_purchase,</if>
+        <if test="dpState != null and dpState != ''">status,</if>
+        <if test="applyUser != null and applyUser != ''">applicant,</if>
+        <if test="operationUser != null and operationUser != ''">warehousing_operator,</if>
+        <if test="enterDate != null">storage_time</if>
+        ) values (
+        <if test="dpid != null and dpid != ''">#{dpid},</if>
+        <if test="dsid != null and dsid != 0">#{dsid},</if>
+        <if test="dpTotalAmount != null and dpTotalAmount != 0">#{dpTotalAmount},</if>
+        <if test="dpState != null and dpState != ''">#{dpState},</if>
+        <if test="applyUser != null and applyUser != ''">#{applyUser},</if>
+        <if test="operationUser != null and operationUser != ''">#{operationUser},</if>
+        <if test="enterDate != null">#{enterDate}</if>
+        )
+    </insert>
+
+    <!--更新-->
+    <update id="update" parameterType="DruPurchase">
+        update warehousingaudit_yjd
+        <set>
+            <if test="dsid != null and dsid != ''">supplier = #{dsid},</if>
+            <if test="dpTotalAmount != null and dpTotalAmount != ''">total_purchase = #{dpTotalAmount},</if>
+            <if test="dpState != null and dpState != ''">status = #{dpState},</if>
+            <if test="applyUser != null and applyUser != ''">applicant = #{applyUser},</if>
+            <if test="operationUser != null and operationUser != ''">warehousing_operator = #{operationUser},</if>
+            <if test="enterDate != null">create_time = #{enterDate}</if>
+        </set>
+        where documents_id = #{dpid}
+    </update>
+
+    <!--    update_time = #{updateTime}-->
+    <select id="selectSupplier" resultType="DruPurchase">
+        select supplier_name as dsid
+        from supplier_maintenance GROUP BY supplier_id
+    </select>
+
+
+
+
+
+
+</mapper>

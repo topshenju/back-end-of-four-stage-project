@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-14 13:45
- **/
+
 @Service
 public class SupplierServiceImpl implements SupplierService {
     @Autowired

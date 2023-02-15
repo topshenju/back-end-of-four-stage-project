@@ -30,19 +30,77 @@
             <if test="applicant !=null and applicant !=''">
                 and w.applicant like concat('%',#{applicant},'%')
             </if>
-            <if test="status !=null and status !=''">
-                and w.status=#{status}
-            </if>
+                and w.status='1'
         </where>
         order by documents_id
     </select>
 
     <update id="updateOne">
-        update warehousingaudit_yjd set status='0' where documents_id=#{param1}
+        update warehousingaudit_yjd set status='2' where documents_id=#{param1}
     </update>
 
     <update id="update">
-        update warehousingaudit_yjd set status='1' where documents_id=#{param1}
+        update warehousingaudit_yjd set status='0' where documents_id=#{param1}
     </update>
 
+    <delete id="deleteWareHousingAudit">
+        delete from warehousingaudit_yjd where documents_id=#{documentsId}
+    </delete>
+
+    <update id="updateWareHousing" parameterType="Drug">
+        update warehousingaudit_yjd
+        <set>
+            <if test="supplier != null and supplier != ''">supplier = #{supplier},</if>
+            <if test="totalPurchase != null and totalPurchase != ''">total_purchase = #{totalPurchase},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="applicant != null and applicant != ''">applicant = #{applicant},</if>
+            <if test="warehousingOperator != null and warehousingOperator != ''">warehousing_operator = #{warehousingOperator},</if>
+            <if test="storageTime != null">storage_time = #{storageTime},</if>
+        </set>
+        where documents_id=#{documentsId}
+    </update>
+
+    <select id="selectOneById" resultMap="aa">
+        <include refid="sql"/>
+        where documents_id = #{documentsId}
+    </select>
+    
+    <select id="selectByRelation" resultMap="inventory1">
+        select
+            w.documents_id as drugId,
+            dmp.maintenance_name as drugName,
+            dwr.numbers as `wholesaleNumber`,
+            dmp.prescription_price as `wholesalePrice`,
+            dwr.numbers*dmp.prescription_price as `wholesaleTotalPrice`,
+            w.documents_id as `wholesaleNo`,
+            dmp.`maintenance_num` as maintenanceNum,
+            dmp.`warning_value` as `warningValue`,
+            w.supplier as `manufacturer`,
+            dmp.`drugtype_id` as drugType,
+            dmp.`prescription_id` as `prescriptionType`,
+            dmp.unit as unit,
+            dmp.`conversion_amount` as `conversionOf`
+        from warehousingaudit_yjd as w
+                 join `durg_ware_relations` as dwr on
+            w.documents_id=dwr.documents_id
+                 join `druginformation_maintenance`as dmp on dwr.`manufacturer_num`=dmp.`maintenance_num`
+    </select>
+
+
+    <resultMap id="inventory1" type="com.ruoyi.project.drugmanagement.inventory.domain.Inventory">
+        <id property="drugId" column="drugId"></id>
+        <result property="drugName" column="drugName"></result>
+        <result property="inventory" column="inventory"></result>
+        <result property="warningValue" column="warningValue"></result>
+        <result property="manufacturer" column="manufacturer"></result>
+        <result property="drugType" column="drugType"></result>
+        <result property="prescriptionType" column="prescriptionType"></result>
+        <result property="unit" column="unit"></result>
+        <result property="conversionOf" column="conversionOf"></result>
+        <result property="wholesaleNumber" column="wholesaleNumber"></result>
+        <result property="wholesalePrice" column="wholesalePrice"></result>
+        <result property="wholesaleTotalPrice" column="wholesaleTotalPrice"></result>
+        <result property="wholesaleNo" column="wholesaleNo"></result>
+        <result property="createTime" column="createTime"></result>
+    </resultMap>
 </mapper>

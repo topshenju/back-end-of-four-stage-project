@@ -89,7 +89,7 @@
             <if test="maintenanceNum != null and maintenanceNum != ''">maintenance_num = #{maintenanceNum},</if>
             <if test="manufacturerId != null and manufacturerId != 0">manufacturer_id = #{manufacturerId},</if>
             <if test="drugtypeId != null and drugtypeId != 0">drugtype_id = #{drugtypeId},</if>
-            <if test="prescriptionId != null and prescriptionId != 0">prescription_id = #{prescriptionId},</if>
+            <if test="prescriptionId != null ">prescription_id = #{prescriptionId},</if>
             <if test="unit != null and unit != ''">unit = #{unit},</if>
             <if test="prescriptionPrice != null and prescriptionPrice != ''">prescription_price = #{prescriptionPrice},</if>
             <if test="inventory != null and inventory != ''">inventory = #{inventory},</if>

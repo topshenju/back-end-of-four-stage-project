@@ -4,10 +4,7 @@ import com.ruoyi.project.drugmanagement.supplier.domain.Supplier;
 
 import java.util.List;
 
-/**
- * @author vincent
- * @data 2021-7-14 13:45
- **/
+
 public interface SupplierService {
     /**
      * 根据查询条件，访问数据库，查询供应商

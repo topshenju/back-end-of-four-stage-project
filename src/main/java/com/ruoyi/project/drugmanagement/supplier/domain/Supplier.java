@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author vincent
- * @data 2021-7-14 10:01
- **/
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -7,7 +7,7 @@
     <resultMap id="aa" type="Inventory">
         <id property="drugId" column="drugId"></id>
         <result property="drugName" column="drugName"></result>
-        <result property="inventory" column="inventory"></result>
+        <result property="maintenanceNum" column="maintenance_num"></result>
         <result property="warningValue" column="warningValue"></result>
         <result property="manufacturer" column="manufacturer"></result>
         <result property="drugType" column="drugType"></result>
@@ -23,28 +23,30 @@
 
     <sql id="sql">
         select i.drug_id drugId,i.drug_name drugName,i.wholesale_number wholesaleNumber,i.wholesale_price wholesalePrice,
-        i.wholesale_total_price wholesaleTotalPrice,i.wholesale_no wholesaleNo,i.create_time createTime,i.inventory inventory,
-        i.warning_value warningValue,i.manufacturer manufacturer,i.drug_type drugType,i.prescription_type prescriptionType,
-        i.unit unit,i.conversion_of conversionOf from inventory_yjd i
+               i.wholesale_total_price wholesaleTotalPrice,i.wholesale_no wholesaleNo,i.create_time createTime,
+               i.warning_value warningValue,i.manufacturer manufacturer,i.drug_type drugType,i.prescription_type prescriptionType,
+               i.unit unit,i.conversion_of conversionOf,sum(wholesale_number) as inventory from inventory_yjd i GROUP BY drug_name
     </sql>
     
     <select id="selectMore" resultMap="aa">
-        <include refid="sql"/>
+        select * from (select i.drug_id drugId,i.drug_name as drugName,i.wholesale_number wholesaleNumber,i.wholesale_price wholesalePrice,
+        i.wholesale_total_price wholesaleTotalPrice,i.wholesale_no wholesaleNo,i.create_time createTime,
+        i.warning_value warningValue,i.manufacturer manufacturer,i.drug_type drugType,i.prescription_type prescriptionType,
+        i.unit unit,i.conversion_of conversionOf,sum(wholesale_number) as inventory from inventory_yjd i GROUP BY drug_name)as t
         <where>
             <if test="drugName !=null and drugName !=''">
-                and drug_name like concat('%',#{drugName},'%')
+                and t.drugName like concat('%',#{drugName},'%')
             </if>
             <if test="drugType !=null and drugType !=''">
-                and drug_type like concat('%',#{drugType},'%')
+                and t.drugType like concat('%',#{drugType},'%')
             </if>
             <if test="manufacturer !=null and manufacturer !=''">
-                and manufacturer like concat('%',#{manufacturer},'%')
+                and t.manufacturer like concat('%',#{manufacturer},'%')
             </if>
             <if test="prescriptionType !=null and prescriptionType !=''">
-                and prescription_type like concat('%',#{prescriptionType},'%')
+                and t.prescriptionType like concat('%',#{prescriptionType},'%')
             </if>
         </where>
-        order by drugId
     </select>
 
     <select id="findType" resultMap="bb">
@@ -56,28 +58,30 @@
     </resultMap>
 
     <select id="selectBatch" resultMap="aa">
-        <include refid="sql"/>
+        select i.drug_id drugId,i.drug_name drugName,i.wholesale_number wholesaleNumber,i.wholesale_price wholesalePrice,
+        i.wholesale_total_price wholesaleTotalPrice,i.wholesale_no wholesaleNo,i.create_time createTime,
+        i.warning_value warningValue,i.manufacturer manufacturer,i.drug_type drugType,i.prescription_type prescriptionType,
+        i.unit unit,i.conversion_of conversionOf from inventory_yjd i
         <where>
-            <if test="drugId !=null and drugId !=''">
-                and drug_id like concat('%',#{drugId},'%')
+            <if test="wholesaleNo !=null and wholesaleNo !=''">
+                and i.wholesale_no like concat('%',#{wholesaleNo},'%')
             </if>
             <if test="drugName !=null and drugName !=''">
-                and drug_name like concat('%',#{drugName},'%')
+                and i.drug_name like concat('%',#{drugName},'%')
             </if>
             <if test="drugType !=null and drugType !=''">
-                and drug_type like concat('%',#{drugType},'%')
+                and i.drug_type like concat('%',#{drugType},'%')
             </if>
             <if test="manufacturer !=null and manufacturer !=''">
-                and manufacturer like concat('%',#{manufacturer},'%')
+                and i.manufacturer like concat('%',#{manufacturer},'%')
             </if>
             <if test="prescriptionType !=null and prescriptionType !=''">
-                and prescription_type like concat('%',#{prescriptionType},'%')
+                and i.prescription_type like concat('%',#{prescriptionType},'%')
             </if>
-            <if test="createTime !=null and createTime !=''">
-                and create_time like concat('%',#{createTime},'%')
+            <if test="firstTime !=null and endTime != null">
+                and i.create_time between #{firstTime} and #{endTime}
             </if>
         </where>
-        order by drugId
     </select>
 
     <select id="findFactory" resultMap="aa">
@@ -88,4 +92,37 @@
         select distinct drug_type drugType from inventory_yjd
     </select>
 
+    <insert id="insertInventory" parameterType="Inventory">
+        insert into inventory_yjd
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="drugName != null">drug_name,</if>
+            <if test="wholesaleNumber != null">wholesale_number,</if>
+            <if test="wholesalePrice != null">wholesale_price,</if>
+            <if test="wholesaleTotalPrice != null">wholesale_total_price,</if>
+            <if test="wholesaleNo != null">wholesale_no,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="maintenanceNum != null">maintenance_num,</if>
+            <if test="warningValue != null">warning_value,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="drugType != null">drug_type,</if>
+            <if test="prescriptionType != null">prescription_type,</if>
+            <if test="unit != null">unit,</if>
+            <if test="conversionOf != null">conversion_of,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="drugName != null">#{drugName},</if>
+            <if test="wholesaleNumber != null">#{wholesaleNumber},</if>
+            <if test="wholesalePrice != null">#{wholesalePrice},</if>
+            <if test="wholesaleTotalPrice != null">#{wholesaleTotalPrice},</if>
+            <if test="wholesaleNo != null">#{wholesaleNo},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="maintenanceNum != null">#{maintenanceNum},</if>
+            <if test="warningValue != null">#{warningValue},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="drugType != null">#{drugType},</if>
+            <if test="prescriptionType != null">#{prescriptionType},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="conversionOf != null">#{conversionOf},</if>
+        </trim>
+    </insert>
 </mapper>

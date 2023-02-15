@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * @Author Ada
- * @Date 2021/7/14 13:56
- */
+
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
@@ -42,4 +39,6 @@ public class InventoryServiceImpl implements InventoryService {
     public List<Inventory> getDrug() {
         return inventoryMapper.findDrug();
     }
+
+
 }

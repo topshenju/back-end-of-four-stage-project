@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.drugmanagement.procurement.mapper.DruPurchaseDrugMapper">
+
+    <insert id="addWarehousing" parameterType="DruPurchaseDrug">
+        insert into `warehousingaudit_yjd`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dpid != null and dpid != ''">documents_id,</if>
+            <if test="druDrug.dmid != null and druDrug.dmid != ''">supplier,</if>
+            <if test="tradePrice != null and tradePrice != 0">total_purchase,</if>
+            <if test="druDrug.ddState != null and druDrug.ddState != ''">status,</if>
+            <if test="druDrug.createBy != null and druDrug.createBy != ''">applicant,</if>
+            <if test="druDrug.updateBy != null and druDrug.updateBy != ''">warehousing_operator,</if>
+            <if test="druDrug.updateTime != null">storage_time,</if>
+            <if test="druDrug.createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dpid != null and dpid != ''">#{dpid},</if>
+            <if test="druDrug.dmid != null and druDrug.dmid != ''">#{druDrug.dmid},</if>
+            <if test="tradePrice != null and tradePrice != 0">#{tradePrice},</if>
+            <if test="druDrug.ddState != null and druDrug.ddState != ''">#{druDrug.ddState},</if>
+            <if test="druDrug.createBy != null and druDrug.createBy !=''">#{druDrug.createBy},</if>
+            <if test="druDrug.updateBy != null and druDrug.updateBy != ''">#{druDrug.updateBy},</if>
+            <if test="druDrug.updateTime != null">#{druDrug.updateTime},</if>
+            <if test="druDrug.createTime != null">#{druDrug.createTime},</if>
+        </trim>
+    </insert>
+
+    <insert id="addDrugAndRelation" parameterType="DruPurchaseDrug">
+        insert into `durg_ware_relations`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dpid != null and dpid != ''">documents_id,</if>
+            <if test="druDrug.ddCoding != null and druDrug.ddCoding !=''">manufacturer_num,</if>
+            <if test="drugNum != 0">numbers,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dpid != null and dpid != ''">#{dpid},</if>
+            <if test="druDrug.ddCoding != null and druDrug.ddCoding != ''">#{druDrug.ddCoding},</if>
+            <if test="drugNum != 0">#{drugNum},</if>
+        </trim>
+    </insert>
+
+
+
+</mapper>

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * 处方类型表
- * @author vincent
- * @data 2021-7-15 9:58
  **/
 @Data
 @AllArgsConstructor

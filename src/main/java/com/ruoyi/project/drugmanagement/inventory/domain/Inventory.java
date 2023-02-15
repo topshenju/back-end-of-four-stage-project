@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
-/**
- * @Author Ada
- * @Date 2021/7/14 13:51
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,9 +25,11 @@ public class Inventory extends BaseEntity {
     //批发额
     private Integer wholesaleTotalPrice;
     //批次号
-    private Integer wholesaleNo;
+    private String wholesaleNo;
     //库存量
-    private Integer inventory;
+    private  Integer inventory;
+
+    private String maintenanceNum;
     //预警值
     private Integer warningValue;
     //生产厂家
@@ -46,5 +45,9 @@ public class Inventory extends BaseEntity {
     //创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date firstTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date endTime;
 
 }
